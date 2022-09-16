@@ -32,89 +32,86 @@ class _TopPageState extends State<TopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          const Text('大阪市', style: TextStyle(fontSize: 25)),
-          Text(currentWeather.descripttion ?? 'No'),
-          Text('${currentWeather.temp ?? 0}°',
-              style: const TextStyle(fontSize: 80)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('最高:${currentWeather.tempMax}°'),
-              const SizedBox(
-                width: 6,
-              ),
-              Text('最低:${currentWeather.tempMin}°'),
-            ],
-          ),
-          const SizedBox(height: 50),
-          const Divider(height: 0),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: perHourWeather.map((weather) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: Column(
-                    children: [
-                      Text('${DateFormat('H').format(weather.time!)}時'),
-                      Padding(padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
-                      ),
-                      WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
-                      Padding(padding: const EdgeInsets.only(top: 8), child: Text('${weather.temp}'),),
-                    ]
-                  ),
-                );
-              }).toList(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            const Text('大阪市', style: TextStyle(fontSize: 25)),
+            Text(currentWeather.descripttion ?? 'No'),
+            Text('${currentWeather.temp ?? 0}°',
+                style: const TextStyle(fontSize: 80)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('最高:${currentWeather.tempMax}°'),
+                const SizedBox(width: 6,),
+                Text('最低:${currentWeather.tempMin}°'),
+              ],
             ),
-          ),
-          const Divider(height: 0),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: dailyWeather.map((weather) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Row(
-                     mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+            const SizedBox(height: 50),
+            const Divider(height: 0),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: perHourWeather.map((weather) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    child: Column(
                       children: [
-                        Container(
-                          color: Colors.white, width: 50,
-                          child: Text('${weekDay[(weather.time?.weekday ?? 1) - 1]}曜日'),
+                        Text('${DateFormat('H').format(weather.time!)}時'),
+                        Padding(padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                         ),
-                        Row(
-                          children: [
-                            WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
-                            Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
-                          ],
-                        ),
-                        Container(
-                          color: Colors.white, width: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('${weather.tempMax}', style: const TextStyle(fontSize: 14),),
-                              Text('${weather.tempMin}', style: const TextStyle(fontSize: 14)),
-                            ],
-                          ),
-                        ),
-                      ],
+                        WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
+                        Padding(padding: const EdgeInsets.only(top: 8), child: Text('${weather.temp}'),),
+                      ]
                     ),
                   );
                 }).toList(),
               ),
             ),
-          ),
-        ],
-      ),
-    ));
+            const Divider(height: 0),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: dailyWeather.map((weather) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: Row(
+                      mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            color: Colors.white, width: 50,
+                            child: Text('${weekDay[(weather.time?.weekday ?? 1) - 1]}曜日'),
+                          ),
+                          Row(
+                            children: [
+                              WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
+                              Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
+                            ],
+                          ),
+                          Container(
+                            color: Colors.white, width: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('${weather.tempMax}', style: const TextStyle(fontSize: 14),),
+                                Text('${weather.tempMin}', style: const TextStyle(fontSize: 14)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+    );
   }
 }
 
