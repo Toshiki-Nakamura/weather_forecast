@@ -27,7 +27,7 @@ class _TopPageState extends State<TopPage> {
     Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
   ];
 
-  List<Weather> daylyWeather = List.generate(7, (i) => 
+  List<Weather> dailyWeather = List.generate(7, (i) => 
     Weather(temp: 20, descripttion: '晴れ',tempMax: 22-i, tempMin: 14, time: DateTime(2022, 9, 16 + i), rainyPercent: 0)
   );
   // [
@@ -91,7 +91,7 @@ class _TopPageState extends State<TopPage> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
-                children: daylyWeather.map((weather) {
+                children: dailyWeather.map((weather) {
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Row(
