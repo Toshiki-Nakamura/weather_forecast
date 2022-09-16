@@ -43,6 +43,22 @@ class _TopPageState extends State<TopPage> {
     super.initState();
   }
 
+  void  _showSnackBarTop({required String title, int sec = 2}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: sec),
+        content: Text(title),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.deepOrange.withOpacity(0.4),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height - 120,
+          right: 40,
+          left: 40
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,11 +71,13 @@ class _TopPageState extends State<TopPage> {
               width: 200,
               child: TextField(
                 onSubmitted: (value) async {
-                  String? found = await ZipCode.searchAddress(value);
-                  if (found != null) {
+                  Map<String, String>? found = await ZipCode.searchAddress(value) ?? {'message': 'error'};
+                  if (found.containsKey('address') == true) {
                     setState(() {
-                      address = found;
+                      address = found['address'];
                     });
+                  } else if (found.containsKey('message') == true) {
+                    _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
                   }
                 },
                 keyboardType: TextInputType.number,
@@ -154,13 +172,12 @@ class _TopPageState extends State<TopPage> {
 //todo 現在の天気情報を表示 => done
 //todo 1時間ごとの天気を表示=> done
 //todo 日每の天気を表示 => done
-
 //todo 郵便番号検索窓のUI作成
-
-
 //todo 郵便番号から住所を取得
 //todo 郵便番号檢索APIをdartで実施
 //todo 檢索時に郵便番号から住所を取得•表示
+
+
 //todo 検索欄への入力内容に間違いがある際にエラーを表示
 //todo 現在の天気情報を取得
 //todo 現在の天気情報をdartで取得
