@@ -27,12 +27,17 @@ class _TopPageState extends State<TopPage> {
     Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
   ];
 
-  List<Weather> daylyWeather = [
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16),rainyPercent: 0),
-    Weather(temp: 18,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 17),rainyPercent: 0),
-    Weather(temp: 16,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 18),rainyPercent: 0),
-    Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 19),rainyPercent: 0),
-  ];
+  List<Weather> daylyWeather = List.generate(7, (i) => 
+    Weather(temp: 20, descripttion: '晴れ',tempMax: 22-i, tempMin: 14, time: DateTime(2022, 9, 16 + i), rainyPercent: 0)
+  );
+  // [
+  //   Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16),rainyPercent: 0),
+  //   Weather(temp: 18,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 17),rainyPercent: 0),
+  //   Weather(temp: 16,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 18),rainyPercent: 0),
+  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 19),rainyPercent: 0),
+  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 20),rainyPercent: 0),
+  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 21),rainyPercent: 0),
+  // ];
 
   List<String> weekDay = ['月','火', '水', '木', '金', '土', '日'];
 
@@ -82,40 +87,41 @@ class _TopPageState extends State<TopPage> {
             ),
           ),
           const Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                   mainAxisAlignment:  MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        color: Colors.red, width: 50,
-                        child: Text('${weekDay[(daylyWeather[0].time?.weekday ?? 1) - 1]}曜日'),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.wb_sunny_sharp),
-                          Text('${daylyWeather[0].rainyPercent}%', style: const TextStyle(color: Colors.blue),),
-                        ],
-                      ),
-                      Container(
-                        color: Colors.red, width: 50,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: daylyWeather.map((weather) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    child: Row(
+                     mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          color: Colors.white, width: 50,
+                          child: Text('${weekDay[(weather.time?.weekday ?? 1) - 1]}曜日'),
+                        ),
+                        Row(
                           children: [
-                            Text('${daylyWeather[0].tempMax}', style: const TextStyle(fontSize: 14),),
-                            Text('${daylyWeather[0].tempMin}', style: const TextStyle(fontSize: 14)),
+                            const Icon(Icons.wb_sunny_sharp),
+                            Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-
-              ],
+                        Container(
+                          color: Colors.white, width: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('${weather.tempMax}', style: const TextStyle(fontSize: 14),),
+                              Text('${weather.tempMin}', style: const TextStyle(fontSize: 14)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         ],
@@ -128,9 +134,9 @@ class _TopPageState extends State<TopPage> {
 
 //todo 天気クラス作成 => done
 //todo 現在の天気情報を表示 => done
-//todo 1時間ごとの天気を表示=> donw
+//todo 1時間ごとの天気を表示=> done
+//todo 日每の天気を表示 => done
 
-//todo 日每の天気を表示
 //todo 郵便番号検索窓のUI作成
 
 
