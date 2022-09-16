@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_forecast/weather.dart';
+import 'package:weather_forecast/zip_code.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key});
@@ -29,14 +32,44 @@ class _TopPageState extends State<TopPage> {
     '曇り': const Icon(Icons.wb_cloudy_sharp, color: Colors.grey),
   };
 
+  String? address;
+  @override
+  void initState() {
+    // Future(() async {
+    //   address = await ZipCode.searchAddress('5770844');
+    //   print(address);
+    // });
+    address = '大阪市';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              color: Colors.blue.shade50,
+              width: 200,
+              child: TextField(
+                onSubmitted: (value) async {
+                  String? found = await ZipCode.searchAddress(value);
+                  if (found != null) {
+                    setState(() {
+                      address = found;
+                    });
+                  }
+                },
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  hintText: '〒: 1234567',
+                ),
+              ),
+            ),
             const SizedBox(height: 50),
-            const Text('大阪市', style: TextStyle(fontSize: 25)),
+            Text('$address', style: const TextStyle(fontSize: 25)),
             Text(currentWeather.descripttion ?? 'No'),
             Text('${currentWeather.temp ?? 0}°',
                 style: const TextStyle(fontSize: 80)),
