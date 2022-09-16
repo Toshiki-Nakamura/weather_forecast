@@ -10,34 +10,15 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  Weather currentWeather =
-      Weather(temp: 18, descripttion: '晴れ', tempMax: 22, tempMin: 14);
-  List<Weather> perHourWeather = [
-    Weather(temp: 15,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 8),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 10),rainyPercent: 0),
-    Weather(temp: 21,descripttion: '曇り',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 12),rainyPercent: 10),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-    Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16, 14),rainyPercent: 0),
-  ];
+  Weather currentWeather = Weather(temp: 18, descripttion: '晴れ', tempMax: 22, tempMin: 14);
+
+  List<Weather> perHourWeather = List.generate(14, (i) => 
+    Weather(temp: 15+i,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022,9,16,8+(i*2)),rainyPercent: 0)
+  );
 
   List<Weather> dailyWeather = List.generate(7, (i) => 
     Weather(temp: 20, descripttion: '晴れ',tempMax: 22-i, tempMin: 14, time: DateTime(2022, 9, 16 + i), rainyPercent: 0)
   );
-  // [
-  //   Weather(temp: 20,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 16),rainyPercent: 0),
-  //   Weather(temp: 18,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 17),rainyPercent: 0),
-  //   Weather(temp: 16,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 18),rainyPercent: 0),
-  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 19),rainyPercent: 0),
-  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 20),rainyPercent: 0),
-  //   Weather(temp: 22,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022, 9, 21),rainyPercent: 0),
-  // ];
 
   List<String> weekDay = ['月','火', '水', '木', '金', '土', '日'];
 
