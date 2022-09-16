@@ -73,9 +73,9 @@ class _TopPageState extends State<TopPage> {
                 onSubmitted: (value) async {
                   Map<String, String>? found = await ZipCode.searchAddress(value) ?? {'message': 'error'};
                   if (found.containsKey('address') == true) {
-                    setState(() {
-                      address = found['address'];
-                    });
+                    address = found['address'];
+                    currentWeather = await Weather.getCurrentWether(value) ?? Weather(descripttion: 'err');
+                    setState(() {});
                   } else if (found.containsKey('message') == true) {
                     _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
                   }
@@ -166,22 +166,6 @@ class _TopPageState extends State<TopPage> {
   }
 }
 
-
-
-//todo 天気クラス作成 => done
-//todo 現在の天気情報を表示 => done
-//todo 1時間ごとの天気を表示=> done
-//todo 日每の天気を表示 => done
-//todo 郵便番号検索窓のUI作成
-//todo 郵便番号から住所を取得
-//todo 郵便番号檢索APIをdartで実施
-//todo 檢索時に郵便番号から住所を取得•表示
-
-
-//todo 検索欄への入力内容に間違いがある際にエラーを表示
-//todo 現在の天気情報を取得
-//todo 現在の天気情報をdartで取得
-//todo 取得した情報から現在の天気情報を表示
 //todo 1時間ごとの天気情報を取得
 //todo 取得した情報から1時間ごとの天気情報を表示
 //todo 日每の天気情報を取得
