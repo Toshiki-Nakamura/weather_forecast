@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_forecast/weather.dart';
@@ -12,7 +13,7 @@ class TopPage extends StatefulWidget {
 class _TopPageState extends State<TopPage> {
   Weather currentWeather = Weather(temp: 18, descripttion: '晴れ', tempMax: 22, tempMin: 14);
 
-  List<Weather> perHourWeather = List.generate(14, (i) => 
+  List<Weather> perHourWeather = List.generate(15, (i) => 
     Weather(temp: 15+i,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022,9,16,8+(i*2)),rainyPercent: 0)
   );
 
@@ -21,6 +22,12 @@ class _TopPageState extends State<TopPage> {
   );
 
   List<String> weekDay = ['月','火', '水', '木', '金', '土', '日'];
+
+  Map<String, Icon> WeatherIcons = {
+    '晴れ': const Icon(Icons.wb_sunny_sharp, color: Colors.orange),
+    '雨': const Icon(CupertinoIcons.cloud_rain, color: Colors.blue),
+    '曇り': const Icon(Icons.wb_cloudy_sharp, color: Colors.grey),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +66,7 @@ class _TopPageState extends State<TopPage> {
                       Padding(padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                       ),
-                      const Icon(Icons.wb_sunny_sharp),
+                      WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
                       Padding(padding: const EdgeInsets.only(top: 8), child: Text('${weather.temp}'),),
                     ]
                   ),
@@ -84,7 +91,7 @@ class _TopPageState extends State<TopPage> {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.wb_sunny_sharp),
+                            WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
                             Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                           ],
                         ),
