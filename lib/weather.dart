@@ -77,7 +77,7 @@ class Weather {
       if (data['cod'] != '200') {
         return weathers;
       }
-      var dateFormatter = DateFormat("y-M-d hh:mm:ss");
+      var dateFormatter = DateFormat("y-M-d HH:mm:ss");
       List<dynamic> list = data['list'];
       List<Weather> weatherList = list.map((value) {
         return Weather(
@@ -92,6 +92,43 @@ class Weather {
     }
     catch (e)
     {
+      print('Execption: \x1B[33m$e\x1B[0m');
+      return null;
+    }
+  }
+
+  static Future<List<Weather>?> getDailyWeathers(String zipcode_) async {
+    var zipCode = convertZipCode(zipcode_);
+    String url = 'https://api.openweathermap.org/data/2.5/forecast?zip=$zipCode,jp&appid=$apiKey';
+    List<Weather> weathers = [];
+    DateTime next =  DateTime.now().add(const Duration(days: 1));
+    DateFormat dateFormatter = DateFormat("y-M-d HH:mm:ss");
+    try {
+      var result = await get(Uri.parse(url));
+      Map<String, dynamic> data = jsonDecode(result.body);
+      if (data['cod'] != '200') {
+        return weathers;
+      }
+      List<dynamic> list = data['list'];
+      List<Weather>? weatherList = list.map((value) {
+        DateTime date =  dateFormatter.parseStrict(value['dt_txt']);
+        var weather = Weather(
+            descripttion: value['weather'][0]['main'],
+            temp: value['main']['temp'].toInt(),
+            tempMax: value['main']['temp_max'].toInt(),
+            tempMin: value['main']['temp_min'].toInt(),
+            time: date,
+            rainyPercent: (((value['pop'] * 100)) / 10.0).round().toInt() * 10,
+            icon: value['weather'][0]['icon'].toString(),
+        );
+        if (date.difference(next).inDays == 0 && date.hour == 15) {
+          next = date.add(const Duration(days: 1));
+          return weather;
+        }
+        return Weather(descripttion: null);
+      }).where((element) => element.descripttion != null).toList();
+      return weatherList;
+    } catch (e) {
       print('Execption: \x1B[33m$e\x1B[0m');
       return null;
     }
