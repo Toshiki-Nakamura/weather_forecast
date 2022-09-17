@@ -79,6 +79,7 @@ class _TopPageState extends State<TopPage> {
                       _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
                     } else {
                       perHourWeather = await Weather.getHourlyWeathers(value) ?? perHourWeather;
+                      dailyWeather = await Weather.getDailyWeathers(value) ?? dailyWeather;
                     }
                     setState(() {});
                   } else if (found.containsKey('message') == true) {
@@ -144,7 +145,8 @@ class _TopPageState extends State<TopPage> {
                           ),
                           Row(
                             children: [
-                              WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
+                              (weather.icon != null) ? Image.network('https://openweathermap.org/img/wn/${weather.icon}.png', width: 30,)
+                              : WeatherIcons[weather.descripttion] ??  const Icon(CupertinoIcons.snow),
                               Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                             ],
                           ),
