@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 class Weather {
   int? temp = 0; //気温
@@ -26,19 +27,27 @@ class Weather {
     this.rainyPercent,
   });
 
-  static Future<Weather?> getCurrentWether(String zipcode_) async {
+  static String apiKey = '6aa145a1c87369884d49b25642de5da7&lang=ja&units=metric';
+
+  static String convertZipCode(String zipcode_) {
     String zipCode  = '';
     if (zipcode_.contains('-')) {
       zipCode = zipcode_;
     } else {
       zipCode = '${zipcode_.substring(0, 3)}-${zipcode_.substring(3)}';
     }
-    print(zipCode);
-    String url = 'https://api.openweathermap.org/data/2.5/weather?zip=$zipCode,jp&appid=6aa145a1c87369884d49b25642de5da7&lang=ja&units=metric';
+    return zipCode;
+  }
+
+
+  static Future<Weather?> getCurrentWether(String zipcode_) async {
+    String zipCode  = convertZipCode(zipcode_);
+    // print(zipCode);
+    String url = 'https://api.openweathermap.org/data/2.5/weather?zip=$zipCode,jp&appid=$apiKey';
     try {
       var result = await get(Uri.parse(url));
       Map<String, dynamic> data = jsonDecode(result.body);
-      print(data);
+      // print(data);
       if (data['cod'] != 200) {
         return Weather(descripttion: 'err',temp:0, tempMax: 0,tempMin: 0,);
       }
@@ -50,7 +59,40 @@ class Weather {
       );
       return currentWeather;
     } catch (e) {
-      print('err: $e');
+      // print('err: $e');
+      return null;
+    }
+  }
+
+  static Future<List<Weather>?> getHourlyWeathers(String zipcode_) async {
+    int size = 12;
+    var zipCode = convertZipCode(zipcode_);
+    String url = 'https://api.openweathermap.org/data/2.5/forecast?zip=$zipCode,jp&cnt=$size&appid=$apiKey';
+    List<Weather> weathers = [];
+
+    try
+    {
+      var result = await get(Uri.parse(url));
+      Map<String, dynamic> data = jsonDecode(result.body);
+      if (data['cod'] != '200') {
+        return weathers;
+      }
+      var dateFormatter = DateFormat("y-M-d hh:mm:ss");
+      List<dynamic> list = data['list'];
+      List<Weather> weatherList = list.map((value) {
+        return Weather(
+          descripttion: value['weather'][0]['main'],
+          temp: value['main']['temp'].toInt(),
+          time: dateFormatter.parseStrict(value['dt_txt']), // "dt_txt": "2022-09-17 06:00:00"
+          rainyPercent: (((value['pop'] * 100)) / 10.0).round().toInt() * 10,
+          icon: value['weather'][0]['icon'].toString(),
+        );
+      }).toList();
+      return weatherList;
+    }
+    catch (e)
+    {
+      print('Execption: \x1B[33m$e\x1B[0m');
       return null;
     }
   }

@@ -75,6 +75,11 @@ class _TopPageState extends State<TopPage> {
                   if (found.containsKey('address') == true) {
                     address = found['address'];
                     currentWeather = await Weather.getCurrentWether(value) ?? Weather(descripttion: 'err');
+                    if (currentWeather.descripttion == 'err') {
+                      _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
+                    } else {
+                      perHourWeather = await Weather.getHourlyWeathers(value) ?? perHourWeather;
+                    }
                     setState(() {});
                   } else if (found.containsKey('message') == true) {
                     _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
@@ -113,7 +118,8 @@ class _TopPageState extends State<TopPage> {
                         Padding(padding: const EdgeInsets.symmetric(vertical: 4),
                           child: Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
                         ),
-                        WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
+                        (weather.icon != null) ? Image.network('https://openweathermap.org/img/wn/${weather.icon}.png', width: 30,)
+                        : WeatherIcons[weather.descripttion] ?? const Icon(CupertinoIcons.snow),
                         Padding(padding: const EdgeInsets.only(top: 8), child: Text('${weather.temp}'),),
                       ]
                     ),
@@ -166,7 +172,5 @@ class _TopPageState extends State<TopPage> {
   }
 }
 
-//todo 1時間ごとの天気情報を取得
-//todo 取得した情報から1時間ごとの天気情報を表示
 //todo 日每の天気情報を取得
 //todo 取得した情報から日每の天気情報を表示
