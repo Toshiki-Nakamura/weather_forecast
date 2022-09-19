@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:weather_forecast/widget/current_data.dart';
-import 'package:weather_forecast/widget/daily_data.dart';
+import 'package:weather_forecast/widget/current_column.dart';
+import 'package:weather_forecast/widget/daily_view.dart';
 import 'package:weather_forecast/provider/data.dart';
-import 'package:weather_forecast/widget/hourly_data.dart';
+import 'package:weather_forecast/widget/hourly_view.dart';
 import 'package:weather_forecast/repository/weather.dart';
 import 'package:weather_forecast/repository/zip_code.dart';
-import 'package:weather_forecast/widget/input_form.dart';
+import 'package:weather_forecast/widget/zipcode_form.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key});
@@ -73,10 +73,10 @@ class _TopPageState extends State<TopPage> {
             return SafeArea(
               child: Column(
                 children: [
-                  const Input(),
-                  const CurrentData(),
-                  const HourlyData(),
-                  DailyData(),
+                  const ZipCodeForm(),
+                  const CurrentColumn(),
+                  const HourlyView(),
+                  DailyView(),
                 ],
               ),
             );
