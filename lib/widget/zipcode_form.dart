@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_forecast/provider/address_data.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:weather_forecast/repository/weather.dart';
 import 'package:weather_forecast/repository/zipcode.dart';
@@ -31,6 +32,7 @@ class _ZipCodeFormState extends State<ZipCodeForm> {
   @override
   Widget build(BuildContext context) {
     final Data data = Provider.of<Data>(context);
+    final AddressData addressData = Provider.of<AddressData>(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       color: Colors.blue.shade50,
@@ -40,16 +42,17 @@ class _ZipCodeFormState extends State<ZipCodeForm> {
           Map<String, String>? found = await ZipCode.searchAddress(value) ?? {'message': 'error'};
           if (found.containsKey('address') == true) {
             var address = found['address'];
+            addressData.setAddress(address!);
             var currentWeather = await Weather.getCurrentWether(value) ?? Weather(descripttion: 'err');
             if (currentWeather.descripttion == 'err') {
-              _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
+              _showSnackBarTop(title: found['message'] ?? 'CURRENT WEATHER ERROR', sec: 5);
             } else {
               var perHourWeather = await Weather.getHourlyWeathers(value);
               var dailyWeather = await Weather.getDailyWeathers(value);
-              data.setNotify(address!, currentWeather, perHourWeather!, dailyWeather!);
+              data.setNotify(currentWeather, perHourWeather!, dailyWeather!);
             }
           } else if (found.containsKey('message') == true) {
-            _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
+            _showSnackBarTop(title: found['message'] ?? 'found.containsKey ERROR', sec: 5);
           }
         },
         keyboardType: TextInputType.number,

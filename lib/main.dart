@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_forecast/provider/address_data.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:weather_forecast/top_page.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +19,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<Data>(
-        create: (context) => Data(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<Data>(
+            create: (context) => Data(),
+            child: const TopPage(),
+          ),
+          ChangeNotifierProvider<AddressData>(
+            create: (context) => AddressData(),
+            child: const TopPage(),
+          ),
+        ],
         child: const TopPage(),
-      ),
+      )
     );
   }
 }

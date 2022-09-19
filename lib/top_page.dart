@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_forecast/provider/address_data.dart';
 
 import 'package:weather_forecast/widget/current_column.dart';
 import 'package:weather_forecast/widget/daily_view.dart';
@@ -20,7 +21,6 @@ class TopPage extends StatefulWidget {
 
 class _TopPageState extends State<TopPage> {
   Future<List<dynamic>?>? initWeather;
-  Data data = Data();
 
   @override
   void initState() {
@@ -46,24 +46,32 @@ class _TopPageState extends State<TopPage> {
   }
 
   Future<List<dynamic>?> setApiStatus() async {
+    Weather currentWeather = Weather(descripttion: 'err');
+    List<Weather> perHourWeather = [Weather(descripttion: 'err')];
+    List<Weather> dailyWeather = [Weather(descripttion: 'err')];
+
     Map<String, String>? found = await ZipCode.searchAddress('1000005') ?? {'message': 'error'};
     if (found.containsKey('address') == true) {
       var address = found['address'] ?? 'ERROR';
-      var currentWeather = await Weather.getCurrentWether('1000005') ?? Weather(descripttion: 'err');
+      currentWeather = await Weather.getCurrentWether('1000005') ?? currentWeather;
       if (currentWeather.descripttion == 'err') {
         _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
       } else {
-        var perHourWeather = await Weather.getHourlyWeathers('1000005') ?? [Weather(descripttion: 'err')];
-        var dailyWeather = await Weather.getDailyWeathers('1000005') ?? [Weather(descripttion: 'err')];
-        data.setNotify(address, currentWeather, perHourWeather, dailyWeather);
+        perHourWeather = await Weather.getHourlyWeathers('1000005') ?? perHourWeather;
+        dailyWeather = await Weather.getDailyWeathers('1000005') ?? dailyWeather;
       }
+      if (!mounted) {
+        print('mouted is false');
+        return null;
+      }
+      context.read<AddressData>().setAddress(address);
+      context.read<Data>().setNotify(currentWeather, perHourWeather, dailyWeather);
     }
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    data = Provider.of<Data>(context);
     return Scaffold(
       body: FutureBuilder(
         future: initWeather, //futureを一回だけ呼びたい場合,initState()で初期化した変数を使う

@@ -13,10 +13,7 @@ class Data extends ChangeNotifier {
     Weather(temp: 20, descripttion: '晴れ',tempMax: 22-i, tempMin: 14, time: DateTime(2022, 9, 16 + i), rainyPercent: 0)
   );
 
-  String? address = 'No Name';
-
-  void setNotify(String addr, Weather current, List<Weather> perHour, List<Weather> daily) {
-    address = addr;
+  void setNotify(Weather current, List<Weather> perHour, List<Weather> daily) {
     currentWeather = current;
     perHourWeather = perHour;
     dailyWeather = daily;
