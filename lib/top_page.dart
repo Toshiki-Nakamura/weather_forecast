@@ -8,7 +8,7 @@ import 'package:weather_forecast/widget/daily_view.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:weather_forecast/widget/hourly_view.dart';
 import 'package:weather_forecast/repository/weather.dart';
-import 'package:weather_forecast/repository/zip_code.dart';
+import 'package:weather_forecast/repository/zipcode.dart';
 import 'package:weather_forecast/widget/zipcode_form.dart';
 
 class TopPage extends StatefulWidget {

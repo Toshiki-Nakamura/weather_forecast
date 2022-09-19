@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:weather_forecast/repository/weather.dart';
-import 'package:weather_forecast/repository/zip_code.dart';
+import 'package:weather_forecast/repository/zipcode.dart';
 import 'package:provider/provider.dart';
 
 class ZipCodeForm extends StatefulWidget {
