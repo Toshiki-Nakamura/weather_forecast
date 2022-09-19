@@ -4,14 +4,14 @@ import 'package:weather_forecast/repository/weather.dart';
 import 'package:weather_forecast/repository/zip_code.dart';
 import 'package:provider/provider.dart';
 
-class Input extends StatefulWidget {
-  const Input({super.key});
+class ZipCodeForm extends StatefulWidget {
+  const ZipCodeForm({super.key});
 
   @override
-  State<Input> createState() => _InputState();
+  State<ZipCodeForm> createState() => _ZipCodeFormState();
 }
 
-class _InputState extends State<Input> {
+class _ZipCodeFormState extends State<ZipCodeForm> {
   void  _showSnackBarTop({required String title, int sec = 2}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

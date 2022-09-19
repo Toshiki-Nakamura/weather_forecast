@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:provider/provider.dart';
 
-class HourlyData extends StatelessWidget {
-  const HourlyData({super.key});
+class HourlyView extends StatelessWidget {
+  const HourlyView({super.key});
 
   @override
   Widget build(BuildContext context) {

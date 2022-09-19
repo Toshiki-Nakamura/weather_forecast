@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:weather_forecast/provider/data.dart';
 import 'package:provider/provider.dart';
 
-class DailyData extends StatelessWidget {
-  DailyData({super.key});
+class DailyView extends StatelessWidget {
+  DailyView({super.key});
 
   final List<String> weekDay = ['月','火', '水', '木', '金', '土', '日'];
 
