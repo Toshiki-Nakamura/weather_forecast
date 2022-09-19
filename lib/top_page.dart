@@ -1,10 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:weather_forecast/weather.dart';
-import 'package:weather_forecast/zip_code.dart';
+import 'package:provider/provider.dart';
+
+import 'package:weather_forecast/widget/current_data.dart';
+import 'package:weather_forecast/widget/daily_data.dart';
+import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/widget/hourly_data.dart';
+import 'package:weather_forecast/repository/weather.dart';
+import 'package:weather_forecast/repository/zip_code.dart';
+import 'package:weather_forecast/widget/input_form.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key});
@@ -14,27 +19,8 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  Weather currentWeather = Weather(temp: 18, descripttion: '晴れ', tempMax: 22, tempMin: 14);
-
-  List<Weather> perHourWeather = List.generate(15, (i) => 
-    Weather(temp: 15+i,descripttion: '晴れ',tempMax: 22,tempMin: 14,time: DateTime(2022,9,16,8+(i*2)),rainyPercent: 0)
-  );
-
-  List<Weather> dailyWeather = List.generate(7, (i) => 
-    Weather(temp: 20, descripttion: '晴れ',tempMax: 22-i, tempMin: 14, time: DateTime(2022, 9, 16 + i), rainyPercent: 0)
-  );
-
-  List<String> weekDay = ['月','火', '水', '木', '金', '土', '日'];
-
-  Map<String, Icon> WeatherIcons = {
-    '晴れ': const Icon(Icons.wb_sunny_sharp, color: Colors.orange),
-    '雨': const Icon(CupertinoIcons.cloud_rain, color: Colors.blue),
-    '曇り': const Icon(Icons.wb_cloudy_sharp, color: Colors.grey),
-  };
-
-  String? address;
-  bool isSetInit = false;
   Future<List<dynamic>?>? initWeather;
+  Data data = Data();
 
   @override
   void initState() {
@@ -60,133 +46,37 @@ class _TopPageState extends State<TopPage> {
   }
 
   Future<List<dynamic>?> setApiStatus() async {
-    // if (isSetInit == true) return null;
     Map<String, String>? found = await ZipCode.searchAddress('1000005') ?? {'message': 'error'};
     if (found.containsKey('address') == true) {
-      address = found['address'];
-      currentWeather = await Weather.getCurrentWether('1000005') ?? Weather(descripttion: 'err');
+      var address = found['address'] ?? 'ERROR';
+      var currentWeather = await Weather.getCurrentWether('1000005') ?? Weather(descripttion: 'err');
       if (currentWeather.descripttion == 'err') {
         _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
       } else {
-        perHourWeather = await Weather.getHourlyWeathers('1000005') ?? perHourWeather;
-        dailyWeather = await Weather.getDailyWeathers('1000005') ?? dailyWeather;
+        var perHourWeather = await Weather.getHourlyWeathers('1000005') ?? [Weather(descripttion: 'err')];
+        var dailyWeather = await Weather.getDailyWeathers('1000005') ?? [Weather(descripttion: 'err')];
+        data.setNotify(address, currentWeather, perHourWeather, dailyWeather);
       }
-      // isSetInit = true;
     }
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    data = Provider.of<Data>(context);
     return Scaffold(
       body: FutureBuilder(
-        future: initWeather,
+        future: initWeather, //futureを一回だけ呼びたい場合,initState()で初期化した変数を使う
         initialData: const [], // null?
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return SafeArea(
               child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    color: Colors.blue.shade50,
-                    width: 200,
-                    child: TextField(
-                      onSubmitted: (value) async {
-                        Map<String, String>? found = await ZipCode.searchAddress(value) ?? {'message': 'error'};
-                        if (found.containsKey('address') == true) {
-                          address = found['address'];
-                          currentWeather = await Weather.getCurrentWether(value) ?? Weather(descripttion: 'err');
-                          if (currentWeather.descripttion == 'err') {
-                            _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
-                          } else {
-                            perHourWeather = await Weather.getHourlyWeathers(value) ?? perHourWeather;
-                            dailyWeather = await Weather.getDailyWeathers(value) ?? dailyWeather;
-                          }
-                          setState(() {});
-                        } else if (found.containsKey('message') == true) {
-                          _showSnackBarTop(title: found['message'] ?? 'ERROR', sec: 5);
-                        }
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: '〒: 1234567',
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  Text('$address', style: const TextStyle(fontSize: 25)),
-                  Text(currentWeather.descripttion ?? 'No'),
-                  Text('${currentWeather.temp ?? 0}°',
-                      style: const TextStyle(fontSize: 80)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('最高:${currentWeather.tempMax}°'),
-                      const SizedBox(width: 6,),
-                      Text('最低:${currentWeather.tempMin}°'),
-                    ],
-                  ),
-                  const SizedBox(height: 50),
-                  const Divider(height: 0),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: perHourWeather.map((weather) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                          child: Column(
-                            children: [
-                              Text('${DateFormat('H').format(weather.time!)}時'),
-                              Padding(padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
-                              ),
-                              Image.network('https://openweathermap.org/img/wn/${weather.icon}.png', width: 30,),
-                              Padding(padding: const EdgeInsets.only(top: 8), child: Text('${weather.temp}'),),
-                            ]
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const Divider(height: 0),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: dailyWeather.map((weather) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                            child: Row(
-                            mainAxisAlignment:  MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  color: Colors.white, width: 50,
-                                  child: Text('${weekDay[(weather.time?.weekday ?? 1) - 1]}曜日'),
-                                ),
-                                Row(
-                                  children: [
-                                    Image.network('https://openweathermap.org/img/wn/${weather.icon}.png', width: 30,),
-                                    Text('${weather.rainyPercent}%', style: const TextStyle(color: Colors.blue),),
-                                  ],
-                                ),
-                                Container(
-                                  color: Colors.white, width: 50,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text('${weather.tempMax}', style: const TextStyle(fontSize: 14),),
-                                      Text('${weather.tempMin}', style: const TextStyle(fontSize: 14)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
+                  const Input(),
+                  const CurrentData(),
+                  const HourlyData(),
+                  DailyData(),
                 ],
               ),
             );
