@@ -6,7 +6,7 @@ import 'package:weather_forecast/provider/address_data.dart';
 
 import 'package:weather_forecast/widget/current_column.dart';
 import 'package:weather_forecast/widget/daily_view.dart';
-import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/provider/weather_data.dart';
 import 'package:weather_forecast/widget/hourly_view.dart';
 import 'package:weather_forecast/repository/weather.dart';
 import 'package:weather_forecast/repository/zipcode.dart';
@@ -65,7 +65,7 @@ class _TopPageState extends State<TopPage> {
         return null;
       }
       context.read<AddressData>().setAddress(address);
-      context.read<Data>().setNotify(currentWeather, perHourWeather, dailyWeather);
+      context.read<WeatherData>().setNotify(currentWeather, perHourWeather, dailyWeather);
     }
     return null;
   }

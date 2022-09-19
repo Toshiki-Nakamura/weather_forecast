@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/provider/weather_data.dart';
 import 'package:provider/provider.dart';
 
 class DailyView extends StatelessWidget {
@@ -9,7 +9,7 @@ class DailyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Data data = Provider.of<Data>(context);
+    final WeatherData data = Provider.of<WeatherData>(context);
     return Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,

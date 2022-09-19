@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_forecast/provider/address_data.dart';
-import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/provider/weather_data.dart';
 import 'package:weather_forecast/repository/weather.dart';
 import 'package:weather_forecast/repository/zipcode.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,7 @@ class _ZipCodeFormState extends State<ZipCodeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final Data data = Provider.of<Data>(context);
+    final WeatherData data = Provider.of<WeatherData>(context);
     final AddressData addressData = Provider.of<AddressData>(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_forecast/provider/address_data.dart';
-import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/provider/weather_data.dart';
 import 'package:weather_forecast/top_page.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider<Data>(
-            create: (context) => Data(),
+          ChangeNotifierProvider<WeatherData>(
+            create: (context) => WeatherData(),
             child: const TopPage(),
           ),
           ChangeNotifierProvider<AddressData>(

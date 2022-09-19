@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weather_forecast/repository/weather.dart';
 import 'package:provider/provider.dart'; 
 
-class Data extends ChangeNotifier {
+class WeatherData extends ChangeNotifier {
   Weather currentWeather = Weather(temp: 18, descripttion: '晴れ', tempMax: 22, tempMin: 14);
 
   List<Weather> perHourWeather = List.generate(15, (i) => 
