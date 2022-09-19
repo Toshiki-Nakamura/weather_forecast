@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_forecast/weather.dart';
+import 'package:weather_forecast/repository/weather.dart';
 import 'package:provider/provider.dart'; 
 
 class Data extends ChangeNotifier {

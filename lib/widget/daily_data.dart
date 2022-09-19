@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:weather_forecast/data.dart';
+import 'package:weather_forecast/provider/data.dart';
 import 'package:provider/provider.dart';
 
 class DailyData extends StatelessWidget {

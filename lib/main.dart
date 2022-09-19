@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_forecast/data.dart';
+import 'package:weather_forecast/provider/data.dart';
 import 'package:weather_forecast/top_page.dart';
 import 'package:provider/provider.dart';
 

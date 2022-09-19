@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:weather_forecast/current_data.dart';
-import 'package:weather_forecast/daily_data.dart';
-import 'package:weather_forecast/data.dart';
-import 'package:weather_forecast/hourly_data.dart';
-import 'package:weather_forecast/weather.dart';
-import 'package:weather_forecast/zip_code.dart';
-import 'package:weather_forecast/input_form.dart';
+import 'package:weather_forecast/widget/current_data.dart';
+import 'package:weather_forecast/widget/daily_data.dart';
+import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/widget/hourly_data.dart';
+import 'package:weather_forecast/repository/weather.dart';
+import 'package:weather_forecast/repository/zip_code.dart';
+import 'package:weather_forecast/widget/input_form.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({super.key});

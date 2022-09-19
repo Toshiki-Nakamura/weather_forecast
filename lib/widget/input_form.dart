@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_forecast/current_data.dart';
-import 'package:weather_forecast/data.dart';
-import 'package:weather_forecast/weather.dart';
-import 'package:weather_forecast/zip_code.dart';
+import 'package:weather_forecast/provider/data.dart';
+import 'package:weather_forecast/repository/weather.dart';
+import 'package:weather_forecast/repository/zip_code.dart';
 import 'package:provider/provider.dart';
 
 class Input extends StatefulWidget {
