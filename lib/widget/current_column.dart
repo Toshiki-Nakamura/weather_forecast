@@ -8,19 +8,18 @@ class CurrentColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final WeatherData weatherData = Provider.of<WeatherData>(context);
     return Column(
         children: [
           const SizedBox(height: 50),
           Text('${context.watch<AddressData>().address}', style: const TextStyle(fontSize: 25)),
-          Text(weatherData.currentWeather.descripttion ?? 'No'),
-          Text('${weatherData.currentWeather.temp ?? 0}°',style: const TextStyle(fontSize: 80)),
+          Text(context.watch<WeatherData>().currentWeather.descripttion ?? 'No'),
+          Text('${context.watch<WeatherData>().currentWeather.temp ?? 0}°',style: const TextStyle(fontSize: 80)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('最高:${weatherData.currentWeather.tempMax}°'),
+              Text('最高:${context.watch<WeatherData>().currentWeather.tempMax}°'),
               const SizedBox(width: 6,),
-              Text('最低:${weatherData.currentWeather.tempMin}°'),
+              Text('最低:${context.watch<WeatherData>().currentWeather.tempMin}°'),
             ],
           ),
           const SizedBox(height: 50),
